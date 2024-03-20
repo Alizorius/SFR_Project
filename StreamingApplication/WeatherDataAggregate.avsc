@@ -1,0 +1,10 @@
+{
+    schema:{
+        "type": "record",
+        "name": "WeatherDataAggregate",
+        "fields": [
+            {"name": "location", "type": "string"},
+            {"name": "average_temperature", "type": "double"}
+        ]
+    }  
+}
