@@ -1,3 +1,5 @@
+import io.confluent.kafka.serializers.AbstractKafkaAvroSerDeConfig;
+import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
@@ -12,6 +14,13 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
+
+/*
+    Kafka Streams application that consume weather forecast data from the weather_forecast topic,
+    aggregates weather forecast data by location and calculates the average temperature, 
+    then creates another stream with the aggregated data
+*/
+
 public class WeatherForecastStream {
 
     public static void main(String[] args) {
@@ -24,7 +33,7 @@ public class WeatherForecastStream {
         SpecificAvroSerde<WeatherForecast> weatherSerde = new SpecificAvroSerde<>();
         SpecificAvroSerde<AggregatedWeatherData> aggregatedSerde = new SpecificAvroSerde<>();
 
-         // Set up serde properties
+        // Set up serde properties
         Map<String, String> serdeConfig = Collections.singletonMap(AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, "http://localhost:8081");
         weatherSerde.configure(serdeConfig, false);
         aggregatedSerde.configure(serdeConfig, false);
@@ -57,7 +66,7 @@ public class WeatherForecastStream {
                 });
 
         // New Stream from aggregated data
-        aggregatedWeatherData.toStream("aggregated_weather_data", Produced.with(Serdes.String(), aggregatedSerde)).foreach((key, value) -> System.out.println("Location: " + key + ", Average Temperature: " + value + "°F"));
+        aggregatedWeatherData.toStream("average_location_temperature", Produced.with(Serdes.String(), aggregatedSerde)).foreach((key, value) -> System.out.println("Location: " + key + ", Average Temperature: " + value + "°F"));
 
         KafkaStreams streams = new KafkaStreams(builder.build(), config);
         streams.start();
