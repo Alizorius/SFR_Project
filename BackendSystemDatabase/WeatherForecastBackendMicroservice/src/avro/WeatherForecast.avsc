@@ -1,0 +1,9 @@
+{
+    "type": "record",
+    "name": "WeatherForecast",
+    "fields": [
+        {"name": "location", "type": "string"},
+        {"name": "condition", "type": "string"},
+        {"name": "temperature", "type": "double"}
+    ]
+}

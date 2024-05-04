@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
@@ -37,3 +37,12 @@ services:
     depends_on:
       - kafka
       - zookeeper
+
+  postgres:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: weather_forecast_admin
+      POSTGRES_PASSWORD: wfadmin
+      POSTGRES_DB: weather_forecast

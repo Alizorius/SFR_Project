@@ -1,0 +1,14 @@
+{
+  "type": "record",
+  "name": "CountAndSum",
+  "fields": [
+    {
+      "name": "count",
+      "type": "int"
+    },
+    {
+      "name": "sum",
+      "type": "double"
+    }
+  ]
+}
