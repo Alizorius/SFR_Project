@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: weather-forecast-app-deployment
+  labels:
+    app: weather-forecast-app
+spec:
+  replicas: 2  # The number of instances you want running
+  selector:
+    matchLabels:
+      app: weather-forecast-app
+  template:
+    metadata:
+      labels:
+        app: weather-forecast-app
+    spec:
+      containers:
+      - name: weather-forecast-app
+        image: weather-forecast  
+        ports:
+        - containerPort: 8080  # The port your application needs to expose
+        resources:
+          limits:
+            memory: "512Mi"  # Memory limit
+            cpu: "500m"  # CPU limit, where 100m is 0.1 of a CPU
+        livenessProbe:
+          httpGet:
+            path: /health  # You should have a health check endpoint if possible
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /health  # Use the same or different path as liveness probe
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
